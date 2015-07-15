@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="sikuli-tessdata">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Documents/Sikulix/sikuli-tessdata.jar!/" />
+      <root url="file://C:" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

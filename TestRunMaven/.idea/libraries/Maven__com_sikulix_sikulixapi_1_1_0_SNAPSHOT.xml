@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Maven: com.sikulix:sikulixapi:1.1.0-SNAPSHOT">
+    <CLASSES />
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/sikulix/sikulixapi/1.1.0-SNAPSHOT/sikulixapi-1.1.0-20150709.230954-186-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/sikulix/sikulixapi/1.1.0-SNAPSHOT/sikulixapi-1.1.0-20150709.230954-186-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

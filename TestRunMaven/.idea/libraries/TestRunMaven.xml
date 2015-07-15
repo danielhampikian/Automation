@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="TestRunMaven">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../SikuliX-2014/TestRunMaven" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../SikuliX-2014/TestRunMaven/src/main/java" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="ImagesAPI">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../TestRunMaven/src/main/resources/ImagesAPI.sikuli" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/../../TestRunMaven/src/main/resources/ImagesAPI.sikuli" recursive="false" />
+  </library>
+</component>
