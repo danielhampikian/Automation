@@ -18,15 +18,5 @@
     <orderEntry type="library" name="Maven: org.swinglabs:swing-layout:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.nativelibs4java:bridj:0.6.2" level="project" />
     <orderEntry type="library" name="Maven: com.sikulix:sikulixlibswin:1.1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="sikulixlibs" level="project" />
-    <orderEntry type="library" name="TestRunMaven" level="project" />
-    <orderEntry type="library" name="sikuli-setup" level="project" />
-    <orderEntry type="library" name="Tesseract-OCR" level="project" />
-    <orderEntry type="library" name="TestScripts" level="project" />
-    <orderEntry type="library" name="java" level="project" />
-    <orderEntry type="library" name="ImagesAPI" level="project" />
-    <orderEntry type="library" name="sikuli-tessdata1" level="project" />
-    <orderEntry type="library" name="sikuli-java" level="project" />
-    <orderEntry type="library" name="SikuliX-2014-master" level="project" />
   </component>
 </module>

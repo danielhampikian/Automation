@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/../../SikuliX-2014.git/TestRunMaven/src/main/resources/ImagesAPI.sikuli/accept_user_agreement.png" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/../../SikuliX-2014.git/TestRunMaven/src/main/resources/ImagesAPI.sikuli/install_image.png" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/../../SikuliX-2014.git/TestRunMaven/src/main/resources/ImagesAPI.sikuli/installer_msi.png" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/../../SikuliX-2014.git/TestRunMaven/src/main/resources/ImagesAPI.sikuli/next.png" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/../../SikuliX-2014.git/TestRunMaven/src/main/resources/ImagesAPI.sikuli/yes_button.png" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/sikulix/testrun/SikuTestRun.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/accept_user_agreement.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/c_drive.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/chanalyzer_filepath.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/close_chan_window.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/close_window.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/deactivate.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/file_explorer.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/finish_button.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/help.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/install_image.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/installer_msi.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/metageek.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/next.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/program_files_86.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/register.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/register.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/registered_to_d_image.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/remove_button.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/second_remove_button.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/verify_chan_dlls.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/verify_deactivate_worked.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/ImagesAPI.sikuli/yes_button.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/continue_deactivate.png" charset="windows-1252" />
   </component>
 </project>

@@ -10,6 +10,11 @@ import static java.lang.Thread.sleep;
 public class SikuTestRun {
 
     public static App app;
+    public static final String CHANBASEKEY = "FJBZ-S87U-AJ5N-YPU7-2D2B-YTHF-WSTA";
+    public static final String NAME = "Daniel Hampikian";
+    public static final String EMAIL = "daniel@metageek.net";
+    public static final String CHANALYER = "Chanalyzer";
+
 
     private static String p(String msg, Object... args) {
         System.out.println(String.format(msg, args));
@@ -26,7 +31,7 @@ public class SikuTestRun {
         Settings sikulixSettings = new Settings();
         sikulixSettings.OcrTextSearch = true;
         sikulixSettings.OcrTextRead = true;
-        testApp("Chanalyzer");
+        testApp(CHANALYER);
     }
 
     public static void testApp(String appName) throws Exception {
@@ -43,23 +48,66 @@ public class SikuTestRun {
         String fpResults = fResults.getPath();
         FileManager.deleteFileOrFolder(fpResults);
         fResults.mkdirs();
+
         //TO DO: print logging to this directory eventually as well as Unit Test results
+        //TO DO: open and close app outside of the testing functions - CLEAN CODE DANIEL, come on!
 
         app = new App(appName);
-        Boolean appOpened = false;
 
         //TO DO: make a method that takes key-value pairs or arrays of objects that contain images paired
         // with click ammounts, so you just send in a list of Strings and ints
 
         installByImageRec();
-        get_to_chanalyzer();
+        getToChanalyzer();
         Region currentWindow = App.focusedWindow();
         verifyTargetImage(currentWindow, "verify_chan_dlls");
+        registerApp(app);
+        verifyRegisteredUserByImage(app);
 
-        //helpMenuRegisteredUserTest(app);
+        currentWindow = App.focusedWindow();
+        deactivateApp(currentWindow);
+        verifyDeactivate(currentWindow);
+        unInstallChanalyzer();
+        verifyUninstall();
     }
 
-    private static void helpMenuRegisteredUserTest(App app) throws Exception {
+    private static void unInstallChanalyzer() throws Exception {
+        tryAndClickOnSomethingInScreen(2, "installer_msi");
+        sleep(800);
+        tryAndClickOnSomethingInScreen(1, "remove_button");
+        sleep(1200);
+        tryAndClickOnSomethingInScreen(1, "second_remove_button");
+        sleep(7100);
+        tryAndClickOnSomethingInScreen(1, "finish_button");
+    }
+
+    private static void verifyDeactivate(Region currentWindow) {
+
+        try {
+            verifyTargetImage(currentWindow, "verify_deactivate_worked");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            clickOnTarget(currentWindow, "close_chan_window");
+            clickOnTarget(currentWindow, "close_chan_window");
+            clickOnTarget(currentWindow, "close_chan_window");;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void deactivateApp(Region currentWindow) {
+        try {
+            clickOnTarget(currentWindow, "deactivate");
+            currentWindow.type(Key.TAB + "DEACTIVATE");
+            clickOnTarget(currentWindow, "continue_deactivate");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void verifyRegisteredUserByImage(App app) throws Exception {
         Boolean appOpened;
         try {
             appOpened = openApp(app);
@@ -72,27 +120,32 @@ public class SikuTestRun {
         if (appOpened = true && app.isRunning()) {
             Region currentWindow = App.focusedWindow();
             clickOnTarget(currentWindow, "help");
-            clickOnTarget(currentWindow, "register");
+            sleep(500);
+            tryAndClickOnSomethingInScreen(1, "register");
             readFromTopRightOfRegistration(currentWindow);
             focusOnWindowJustBelowImageAndRead(currentWindow, "registration_image_above_name_field");
+            verifyTargetImage(currentWindow, "registered_to_d_image");
+
         }
     }
 
 
     private static void registerApp(App app) throws Exception {
-        Boolean appOpened;
+
         try {
-            appOpened = openApp(app);
+            Boolean appOpened = openApp(app);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        sleep(2500);
+        sleep(3500);
 
-        if (appOpened = true && app.isRunning()) {
+        if (app.isRunning()) {
             Region currentWindow = App.focusedWindow();
             clickOnTarget(currentWindow, "help");
             clickOnTarget(currentWindow, "register");
+            currentWindow.type(CHANBASEKEY + Key.TAB + NAME + Key.TAB
+            + EMAIL + Key.TAB + Key.TAB + Key.ENTER);
             readFromTopRightOfRegistration(currentWindow);
             focusOnWindowJustBelowImageAndRead(currentWindow, "registration_image_above_name_field");
         }
@@ -100,7 +153,7 @@ public class SikuTestRun {
 
 
 
-    private static void get_to_chanalyzer() throws Exception {
+    private static void getToChanalyzer() throws Exception {
         tryAndClickOnSomethingInScreen(1, "file_explorer");
         sleep(100);
         tryAndClickOnSomethingInScreen(1, "c_drive");
@@ -111,6 +164,47 @@ public class SikuTestRun {
         sleep(100);
         tryAndClickOnSomethingInScreen(2, "chanalyzer_filepath");
         sleep(100);
+    }
+
+    private static void verifyUninstall() throws Exception {
+        tryAndClickOnSomethingInScreen(1, "file_explorer");
+        sleep(100);
+        tryAndClickOnSomethingInScreen(1, "c_drive");
+        sleep(100);
+        tryAndClickOnSomethingInScreen(2, "program_files_86");
+        sleep(100);
+        Boolean imageExists = verifyTargetImageDoesntExist("metageek");
+        if (imageExists) {
+            tryAndClickOnSomethingInScreen(2, "metageek");
+            sleep(100);
+            imageExists = verifyTargetImageDoesntExist("chanalyzer_filepath");
+            if(imageExists)
+                p("\nTest FAILS FAILS FAILS!!! - INSTALLATION DIDN't WORK!!!!\n");
+        }
+    }
+
+
+    private static Boolean verifyTargetImageDoesntExist(String imageName) {
+        Boolean imageExists = true;
+        try {
+            Match foundImage = null;
+            Screen imageSearchScreen = new Screen();
+            foundImage = imageSearchScreen.exists(imageName);
+
+            if (null == foundImage) {
+                imageExists = false;
+                p("\nPASSED!!!!! PASSED!!! PASSSEED!!!" +
+                        "\nThe image of " + imageName + " DOES NOT exist!\n PASSED PASSED PASSEEDD!!!!\n");
+            }
+            else
+                p("\n***************\nFAILED FAILED FAILED!!! \nTHE IMAGE: " + imageName + "DOES EXIST AND IT SHOULDN'T \n***************\n");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        return imageExists;
     }
 
     private static void installByImageRec() throws Exception {
@@ -133,7 +227,6 @@ public class SikuTestRun {
 
     private static void clickOnTarget(Region currentWin, String imageName) throws Exception{
 
-
         try {
             String imageSpecs, imageText,actualImageLocInApp,  matchingImagePathInTest = null;
             Boolean clickStatus = false;
@@ -146,11 +239,13 @@ public class SikuTestRun {
                 actualImageLocInApp = p("image location on app and confidence of match %s", foundImage.getImage());
                 matchingImagePathInTest = p("path to the image used for matching: %s", foundImage.getImageFilename());
                 currentWin.click();
-                p("Click on " + imageName + " should have worked!");
+                p("PASSED!!!!! PASSED!!! PASSSEED!!!! Click on " + imageName + " should have worked!");
                 clickStatus = true;
                 setWindowToNameField(currentWin);
                 imageText = p("All of the text found on this image is: %s", currentWin.text());
             }
+            else
+                p("\n***************\nFAILED FAILED FAILED!!! TRYING TO CLICK ON: " + imageName + "\n***************\n");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,10 +255,8 @@ public class SikuTestRun {
 
     private static void verifyTargetImage(Region currentWin, String imageName) throws Exception{
 
-
         try {
             String imageSpecs, imageText,actualImageLocInApp,  matchingImagePathInTest = null;
-
 
             Match foundImage = null;
             foundImage = currentWin.exists(imageName);
@@ -172,19 +265,24 @@ public class SikuTestRun {
                 imageSpecs = p("Image specs: %s", foundImage);
                 actualImageLocInApp = p("image location on app and confidence of match %s", foundImage.getImage());
                 matchingImagePathInTest = p("path to the image used for matching: %s", foundImage.getImageFilename());
-                p("The image of " + imageName + " exists!");
+                p("\nPASSED!!!!! PASSED!!! PASSSEED!!!" +
+                        "\nThe image of " + imageName + " exists!\n PASSED PASSED PASSEEDD!!!!\n");
 
                 setWindowToNameField(currentWin);
                 imageText = p("All of the text found on this image is: %s", currentWin.text());
                 tryAndClickOnSomethingInScreen(1, "close_window");
 
             }
+            else
+                p("\n***************\nFAILED FAILED FAILED!!! TRYING TO CLICK ON: " + imageName + "\n***************\n");
 
         } catch (Exception e) {
             e.printStackTrace();
 
         }
     }
+
+
 
     private static void tryAndClickOnSomethingInScreen(int numClicks, String imageName) throws Exception{
 

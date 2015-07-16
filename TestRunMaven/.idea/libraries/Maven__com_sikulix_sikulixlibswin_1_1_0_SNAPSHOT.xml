@@ -1,11 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: com.sikulix:sikulixlibswin:1.1.0-SNAPSHOT">
-    <CLASSES />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/sikulix/sikulixlibswin/1.1.0-SNAPSHOT/sikulixlibswin-1.1.0-20150714.230241-204.jar!/" />
+    </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/com/sikulix/sikulixlibswin/1.1.0-SNAPSHOT/sikulixlibswin-1.1.0-20150709.230240-199-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/sikulix/sikulixlibswin/1.1.0-SNAPSHOT/sikulixlibswin-1.1.0-20150714.230241-204-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/sikulix/sikulixlibswin/1.1.0-SNAPSHOT/sikulixlibswin-1.1.0-20150709.230240-199-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/sikulix/sikulixlibswin/1.1.0-SNAPSHOT/sikulixlibswin-1.1.0-20150714.230241-204-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
