@@ -1,7 +1,8 @@
 package com.sikulix.testrun;
-
-import java.io.File;
-
+import java.io.*;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 import org.sikuli.basics.Settings;
 import org.sikuli.script.*;
 import org.sikuli.basics.FileManager;
@@ -14,11 +15,19 @@ public class SikuTestRun {
     public static final String NAME = "Daniel Hampikian";
     public static final String EMAIL = "daniel@metageek.net";
     public static final String CHANALYER = "Chanalyzer";
-
+    public static int test_step;
+    public static File outputfile;
+    public static Writer writer;
 
     private static String p(String msg, Object... args) {
         System.out.println(String.format(msg, args));
         return (String.format(msg, args));
+    }
+
+    public static String currentTimeStamp() {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        DateFormat f = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
+        return f.format(cal.getTime());
     }
 
 
@@ -36,27 +45,20 @@ public class SikuTestRun {
 
     public static void testApp(String appName) throws Exception {
 
-
         //Tesseract setup for text reading
         Settings.OcrTextRead = true;
         Settings.OcrLanguage = "en";
         Settings.OcrTextSearch = true;
 
-
+        String currentTime = currentTimeStamp();
         ImagePath.add(SikuTestRun.class.getCanonicalName() + "/ImagesAPI.sikuli");
-        File fResults = new File(System.getProperty("user.home"), "TestResults");
-        String fpResults = fResults.getPath();
-        FileManager.deleteFileOrFolder(fpResults);
-        fResults.mkdirs();
-
-        //TO DO: print logging to this directory eventually as well as Unit Test results
-        //TO DO: open and close app outside of the testing functions - CLEAN CODE DANIEL, come on!
+        outputfile = new File("TestReport.txt");
+        PrintStream out = new PrintStream(new FileOutputStream("TestReport.txt"));
+        //System.setOut(out);
+        p(currentTime);
 
         app = new App(appName);
-
-        //TO DO: make a method that takes key-value pairs or arrays of objects that contain images paired
-        // with click ammounts, so you just send in a list of Strings and ints
-
+        test_step = 0;
         installByImageRec();
         getToChanalyzer();
         Region currentWindow = App.focusedWindow();
@@ -66,14 +68,16 @@ public class SikuTestRun {
 
         currentWindow = App.focusedWindow();
         deactivateApp(currentWindow);
+        currentWindow = App.focusedWindow();
         verifyDeactivate(currentWindow);
         unInstallChanalyzer();
         verifyUninstall();
     }
 
     private static void unInstallChanalyzer() throws Exception {
-        tryAndClickOnSomethingInScreen(2, "installer_msi");
+        tryAndClickOnSomethingInScreen(2, "installer");
         sleep(800);
+        tryAndClickOnSomethingInScreen(1, "next");
         tryAndClickOnSomethingInScreen(1, "remove_button");
         sleep(1200);
         tryAndClickOnSomethingInScreen(1, "second_remove_button");
@@ -84,14 +88,21 @@ public class SikuTestRun {
     private static void verifyDeactivate(Region currentWindow) {
 
         try {
-            verifyTargetImage(currentWindow, "verify_deactivate_worked");
+            currentWindow = app.focusedWindow();
+            verifyTargetImage(currentWindow, "deactivate_verify");
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            clickOnTarget(currentWindow, "close_chan_window");
-            clickOnTarget(currentWindow, "close_chan_window");
-            clickOnTarget(currentWindow, "close_chan_window");;
+            currentWindow = app.focusedWindow();
+            sleep(700);
+            clickOnTarget(currentWindow, "red_x");
+            currentWindow = app.focusedWindow();
+            sleep(700);
+            clickOnTarget(currentWindow, "red_x");
+            sleep(700);
+            currentWindow = app.focusedWindow();
+            clickOnTarget(currentWindow, "red_x");;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,8 +111,7 @@ public class SikuTestRun {
     private static void deactivateApp(Region currentWindow) {
         try {
             clickOnTarget(currentWindow, "deactivate");
-            currentWindow.type(Key.TAB + "DEACTIVATE");
-            clickOnTarget(currentWindow, "continue_deactivate");
+            currentWindow.type(Key.TAB + "DEACTIVATE" + Key.TAB + Key.ENTER);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,18 +124,17 @@ public class SikuTestRun {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        sleep(1500);
+        sleep(2500);
 
         if (appOpened = true && app.isRunning()) {
             Region currentWindow = App.focusedWindow();
             clickOnTarget(currentWindow, "help");
-            sleep(500);
             tryAndClickOnSomethingInScreen(1, "register");
-            readFromTopRightOfRegistration(currentWindow);
-            focusOnWindowJustBelowImageAndRead(currentWindow, "registration_image_above_name_field");
-            verifyTargetImage(currentWindow, "registered_to_d_image");
-
+            currentWindow = App.focusedWindow();
+            verifyTargetImage(currentWindow, "verify_registered");
+            currentWindow = app.focusedWindow();
+            sleep(700);
+            clickOnTarget(currentWindow, "red_x");
         }
     }
 
@@ -137,13 +146,10 @@ public class SikuTestRun {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         sleep(3500);
 
         if (app.isRunning()) {
             Region currentWindow = App.focusedWindow();
-            clickOnTarget(currentWindow, "help");
-            clickOnTarget(currentWindow, "register");
             currentWindow.type(CHANBASEKEY + Key.TAB + NAME + Key.TAB
             + EMAIL + Key.TAB + Key.TAB + Key.ENTER);
             readFromTopRightOfRegistration(currentWindow);
@@ -181,6 +187,11 @@ public class SikuTestRun {
             if(imageExists)
                 p("\nTest FAILS FAILS FAILS!!! - INSTALLATION DIDN't WORK!!!!\n");
         }
+        else {
+            p("\nPASSED!!!!! PASSED!!! PASSSEED!!!" +
+                    "\nThe INSTALLATION worked!!!!\n");
+        }
+
     }
 
 
@@ -197,13 +208,12 @@ public class SikuTestRun {
                         "\nThe image of " + imageName + " DOES NOT exist!\n PASSED PASSED PASSEEDD!!!!\n");
             }
             else
-                p("\n***************\nFAILED FAILED FAILED!!! \nTHE IMAGE: " + imageName + "DOES EXIST AND IT SHOULDN'T \n***************\n");
+                p("\n***************\nPASSED! PASSED!!! \nBUT NOTE: IF CHANALYZER IS BEING TESTED " +
+                        "\nON A CLEAN VM, THE IMAGE: " + imageName + " DOES EXIST AND IT SHOULDN'T \n***************\n");
 
         } catch (Exception e) {
             e.printStackTrace();
-
         }
-
         return imageExists;
     }
 
@@ -224,6 +234,10 @@ public class SikuTestRun {
         tryAndClickOnSomethingInScreen(1, "finish_button");
     }
 
+    private static void closeWindow() throws Exception{
+        tryAndClickOnSomethingInScreen(1, "red_x)");
+    }
+
 
     private static void clickOnTarget(Region currentWin, String imageName) throws Exception{
 
@@ -241,8 +255,7 @@ public class SikuTestRun {
                 currentWin.click();
                 p("PASSED!!!!! PASSED!!! PASSSEED!!!! Click on " + imageName + " should have worked!");
                 clickStatus = true;
-                setWindowToNameField(currentWin);
-                imageText = p("All of the text found on this image is: %s", currentWin.text());
+                //imageText = p("All of the text found on this image is: %s", currentWin.text());
             }
             else
                 p("\n***************\nFAILED FAILED FAILED!!! TRYING TO CLICK ON: " + imageName + "\n***************\n");
@@ -267,14 +280,10 @@ public class SikuTestRun {
                 matchingImagePathInTest = p("path to the image used for matching: %s", foundImage.getImageFilename());
                 p("\nPASSED!!!!! PASSED!!! PASSSEED!!!" +
                         "\nThe image of " + imageName + " exists!\n PASSED PASSED PASSEEDD!!!!\n");
-
-                setWindowToNameField(currentWin);
-                imageText = p("All of the text found on this image is: %s", currentWin.text());
-                tryAndClickOnSomethingInScreen(1, "close_window");
-
+                //imageText = p("All of the text found on this image is: %s", currentWin.text());
             }
             else
-                p("\n***************\nFAILED FAILED FAILED!!! TRYING TO CLICK ON: " + imageName + "\n***************\n");
+                p("\n***************\nFAILED FAILED FAILED!!! Could not find: " + imageName + "\n***************\n");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -288,8 +297,7 @@ public class SikuTestRun {
 
         String imageSpecs, imageText,actualImageLocInApp,  matchingImagePathInTest = null;
 
-        Screen screen = new Screen();
-        Region currentWin = screen;
+        Screen currentWin = new Screen();
         Match foundImage = null;
         foundImage = currentWin.exists(imageName);
 
@@ -300,20 +308,16 @@ public class SikuTestRun {
                 actualImageLocInApp = p("image location on app and confidence of match %s", foundImage.getImage());
                 matchingImagePathInTest = p("path to the image used for matching: %s", foundImage.getImageFilename());
                 p("The image of " + imageName + " exists!");
-                setWindowToNameField(currentWin);
-                imageText = p("All of the text found on this image is: %s", currentWin.text());
+                //imageText = p("All of the text found on this image is: %s", currentWin.text());
             }
-
             if (numClicks==1) {
                singleClickOnTarget(imageName);
                 p("Single clicked on " + imageName + "!");
-
             }
             if (numClicks==2) {
                 doubleClickOnTarget(imageName);
                 p("Double clicked on " + imageName + "!");
             }
-
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -321,8 +325,6 @@ public class SikuTestRun {
     }
 
     private static void doubleClickOnTarget(String imageName) throws Exception{
-
-
         try {
            Screen screen = new Screen();
             screen.doubleClick(imageName);
@@ -332,8 +334,6 @@ public class SikuTestRun {
     }
 
     private static void singleClickOnTarget(String imageName) throws Exception{
-
-
         try {
             Screen screen = new Screen();
             screen.click(imageName);
@@ -343,14 +343,8 @@ public class SikuTestRun {
     }
 
 
-    private static void setWindowToNameField(Region currentWin) {
-        currentWin.setX(268);
-        currentWin.setY(393);
-        currentWin.setH(40);
-        currentWin.setW(300);
-    }
-
     private static String focusOnWindowJustBelowImageAndRead (Region currentWin, String imageName) throws Exception {
+        //NOT YET WORKING METHOD!!!! TO DO: MAKE IT WORK!
         String windowText = "read just below image did not work";
         String imageSpecs, actualImageLocInApp,  matchingImagePathInTest = null;
         Boolean readStatus = false;
@@ -363,13 +357,11 @@ public class SikuTestRun {
                 imageSpecs = p("Image specs: %s", foundImage);
                 actualImageLocInApp = p("image location on app and confidence of match %s", foundImage.getImage());
                 matchingImagePathInTest = p("path to the image used for matching: %s", foundImage.getImageFilename());
-
                 Location loc = foundImage.getTarget();
                 Region justBelowWindow = currentWin.below();
                 justBelowWindow = App.focusedWindow();
 
                 windowText = p("The text in the window just below the image is: %s", currentWin.text());
-
             }
         }
         catch (Exception e) {
@@ -379,6 +371,7 @@ public class SikuTestRun {
     }
 
     private static String readFromTopRightOfRegistration(Region currentWin) throws Exception {
+        //Hard coded method to demonstrate tesseract text reading
         String foundText = null;
         String  imageSpecs, actualImageLocInApp;
 
@@ -400,16 +393,12 @@ public class SikuTestRun {
     }
 
 
-
     private static boolean openApp(App app) throws Exception {
         //TO DO: make abstract and take app name as param
 
         boolean appOpened = false;
         try {
-
-
             while (!appOpened) {
-
                 app.open("Chanalyzer.exe");
                 app.focus("Chanalyzer.exe");
                 sleep(10000);
@@ -421,10 +410,6 @@ public class SikuTestRun {
         }
         return appOpened;
     }
-
-
-
-
 }
 
 
